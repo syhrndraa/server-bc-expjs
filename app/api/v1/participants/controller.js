@@ -7,9 +7,9 @@ const {
   getAllOrders,
   checkoutOrder,
   getAllPaymentByOrganizer,
-} = require("../../../services/mongoose/participants");
+} = require('../../../services/mongoose/participants');
 
-const { StatusCodes } = require("http-status-codes");
+const { StatusCodes } = require('http-status-codes');
 
 const signup = async (req, res, next) => {
   try {
@@ -40,8 +40,10 @@ const signin = async (req, res, next) => {
     const result = await signinParticipant(req);
 
     res.status(StatusCodes.OK).json({
-      data: { token: result },
+      data: result,
     });
+    console.log('result');
+    console.log(result);
   } catch (err) {
     next(err);
   }

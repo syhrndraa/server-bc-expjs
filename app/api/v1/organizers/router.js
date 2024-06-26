@@ -1,31 +1,48 @@
-const express = require("express");
+const express = require('express');
 const router = express();
 const {
   createCMSOrganizer,
   createCMSUser,
   getCMSUsers,
-} = require("./controller");
+  getCMSAdmins,
+  deleteCMSAdmins,
+} = require('./controller');
 
 const {
   authenticateUser,
   authorizeRoles,
-} = require("../../../middlewares/auth");
+} = require('../../../middlewares/auth');
 
 router.post(
-  "/organizers",
+  '/organizers',
   authenticateUser,
-  authorizeRoles("owner"),
+  authorizeRoles('owner'),
   createCMSOrganizer
 );
 
 // router.post("/users", createCMSUser);
 router.post(
-  "/users",
+  '/users',
   authenticateUser,
-  authorizeRoles("organizer"),
+  authorizeRoles('organizer'),
   createCMSUser
 );
 
-router.get("/users", authenticateUser, authorizeRoles("owner"), getCMSUsers);
+router.get(
+  '/admins',
+  authenticateUser,
+  authorizeRoles('organizer'),
+  getCMSAdmins
+);
+router.get('/users', authenticateUser, authorizeRoles('owner'), getCMSUsers);
+
+router.delete(
+  '/admins/:id',
+  authenticateUser,
+  authorizeRoles('organizer'),
+  deleteCMSAdmins
+);
+
+// router.get('/users', authenticateUser, authorizeRoles('owner'), getCMSUsers);
 
 module.exports = router;
