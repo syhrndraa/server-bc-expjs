@@ -43,8 +43,25 @@ const createUsers = async (req, res) => {
 };
 
 const getAllUsers = async (req) => {
+  const { keyword } = req.query;
   let condition = { role: 'organizer' };
+
+  if (keyword) {
+    condition = {
+      ...condition,
+      name: { $regex: keyword, $options: 'i' },
+    };
+  }
   const result = await Users.find(condition);
+
+  return result;
+};
+
+const getOneUsers = async (req) => {
+  const { id } = req.params;
+  const result = await Users.findOne({ _id: id });
+
+  if (!result) throw new NotFoundError(`Tidak ada user dengan id :  ${id}`);
 
   return result;
 };
@@ -64,12 +81,11 @@ const getAllAdmins = async (req) => {
   return result;
 };
 
-const deleteAdmins = async (req) => {
+const deleteUsers = async (req) => {
   const { id } = req.params;
 
   const result = await Users.findOne({
     _id: id,
-    organizer: req.user.organizer,
   });
 
   if (!result) throw new NotFoundError(`Tidak ada admin dengan id :  ${id}`);
@@ -78,10 +94,38 @@ const deleteAdmins = async (req) => {
 
   return result;
 };
+
+const updateUsers = async (req, res) => {
+  const { id } = req.params;
+  const { name, password, role, confirmPassword, email } = req.body;
+
+  const check = await Users.findOne({
+    _id: id,
+  });
+
+  if (!check) throw new NotFoundError(`Tidak ada user dengan id :  ${id}`);
+
+  if (password !== confirmPassword) {
+    throw new BadRequestError('Password dan Konfirmasi password tidak cocok');
+  }
+
+  const result = await Users.put({
+    name,
+    email,
+    organizer: req.user.organizer,
+    password,
+    role,
+  });
+
+  return result;
+};
+
 module.exports = {
   createOrganizer,
   createUsers,
   getAllAdmins,
-  deleteAdmins,
+  deleteUsers,
+  updateUsers,
   getAllUsers,
+  getOneUsers,
 };

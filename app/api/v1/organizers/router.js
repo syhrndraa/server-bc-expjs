@@ -5,7 +5,9 @@ const {
   createCMSUser,
   getCMSUsers,
   getCMSAdmins,
-  deleteCMSAdmins,
+  deleteCMSUsers,
+  putCMSUsers,
+  getOneCMSUsers,
 } = require('./controller');
 
 const {
@@ -29,6 +31,13 @@ router.post(
 );
 
 router.get(
+  '/users/:id',
+  authenticateUser,
+  authorizeRoles('owner', 'organizer'),
+  getOneCMSUsers
+);
+
+router.get(
   '/admins',
   authenticateUser,
   authorizeRoles('organizer'),
@@ -37,10 +46,17 @@ router.get(
 router.get('/users', authenticateUser, authorizeRoles('owner'), getCMSUsers);
 
 router.delete(
-  '/admins/:id',
+  '/users/:id',
   authenticateUser,
-  authorizeRoles('organizer'),
-  deleteCMSAdmins
+  authorizeRoles('owner', 'organizer'),
+  deleteCMSUsers
+);
+
+router.put(
+  '/users/:id',
+  authenticateUser,
+  authorizeRoles('owner', 'organizer'),
+  putCMSUsers
 );
 
 // router.get('/users', authenticateUser, authorizeRoles('owner'), getCMSUsers);

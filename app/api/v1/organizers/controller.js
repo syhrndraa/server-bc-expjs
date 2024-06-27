@@ -4,13 +4,26 @@ const {
   createOrganizer,
   createUsers,
   getAllUsers,
+  getOneUsers,
   getAllAdmins,
-  deleteAdmins,
+  deleteUsers,
+  updateUsers,
 } = require('../../../services/mongoose/users');
 
 const getCMSUsers = async (req, res, next) => {
   try {
     const result = await getAllUsers(req);
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getOneCMSUsers = async (req, res, next) => {
+  try {
+    const result = await getOneUsers(req);
     res.status(StatusCodes.OK).json({
       data: result,
     });
@@ -53,9 +66,20 @@ const createCMSUser = async (req, res, next) => {
   }
 };
 
-const deleteCMSAdmins = async (req, res, next) => {
+const deleteCMSUsers = async (req, res, next) => {
   try {
-    const result = await deleteAdmins(req);
+    const result = await deleteUsers(req);
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const putCMSUsers = async (req, res, next) => {
+  try {
+    const result = await updateUsers(req);
     res.status(StatusCodes.OK).json({
       data: result,
     });
@@ -68,6 +92,8 @@ module.exports = {
   createCMSOrganizer,
   createCMSUser,
   getCMSUsers,
+  getOneCMSUsers,
   getCMSAdmins,
-  deleteCMSAdmins,
+  deleteCMSUsers,
+  putCMSUsers,
 };
