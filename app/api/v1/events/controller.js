@@ -1,13 +1,14 @@
 const {
   getAllEvents,
+  getAllEventsbyOwner,
   getOneEvents,
   updateEvents,
   createEvents,
   deleteEvents,
   changeStatusEvents,
-} = require("../../../services/mongoose/events");
+} = require('../../../services/mongoose/events');
 
-const { StatusCodes } = require("http-status-codes");
+const { StatusCodes } = require('http-status-codes');
 
 const create = async (req, res, next) => {
   try {
@@ -24,6 +25,18 @@ const create = async (req, res, next) => {
 const index = async (req, res, next) => {
   try {
     const result = await getAllEvents(req);
+
+    res.status(StatusCodes.OK).json({
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getByOwner = async (req, res, next) => {
+  try {
+    const result = await getAllEventsbyOwner(req);
 
     res.status(StatusCodes.OK).json({
       data: result,
@@ -83,6 +96,7 @@ const changeStatus = async (req, res, next) => {
 
 module.exports = {
   index,
+  getByOwner,
   find,
   update,
   destroy,
