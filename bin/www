@@ -25,20 +25,18 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-db.on('error', function(err){
-  console.log('connection error: tidak bisa tersambung ke mongodb' );
+db.on('error', function (err) {
+  console.log('connection error: tidak bisa tersambung ke mongodb');
 });
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-db.on('open', function(){
+db.on('open', function () {
   server.listen(port);
   server.on('error', onError);
   server.on('listening', onListening);
 });
-
-
 
 /**
  * Normalize a port into a number, string, or false.
@@ -69,9 +67,7 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -94,8 +90,6 @@ function onError(error) {
 
 function onListening() {
   const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }

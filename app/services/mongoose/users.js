@@ -109,7 +109,7 @@ const updateUsers = async (req, res) => {
     throw new BadRequestError('Password dan Konfirmasi password tidak cocok');
   }
 
-  const result = await Users.put({
+  const result = await Users.findOneAndUpdate({
     name,
     email,
     organizer: req.user.organizer,
