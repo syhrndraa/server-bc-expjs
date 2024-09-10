@@ -24,7 +24,7 @@ router.post(
 
 // router.post("/users", createCMSUser);
 router.post(
-  '/users',
+  '/admins',
   authenticateUser,
   authorizeRoles('organizer'),
   createCMSUser
